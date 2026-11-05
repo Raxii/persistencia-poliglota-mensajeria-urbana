@@ -1,0 +1,49 @@
+# Pruebas Persona 2 — VS Code REST Client
+# Ejecutar con la API integrada y servicios MongoDB/Redis activos.
+@url = http://localhost:3000
+@token_repartidor = PEGAR_TOKEN_REPARTIDOR
+@token_cliente = PEGAR_TOKEN_CLIENTE
+@token_operador = PEGAR_TOKEN_OPERADOR
+@codigo = PEGAR_CODIGO_ENVIO_ENTREGADO
+@repartidor_id = 1
+
+### 1. Consultar historial (cliente propietario o personal autorizado)
+GET {{url}}/api/envios/{{codigo}}/historial
+Authorization: Bearer {{token_cliente}}
+
+### 2. Consultar evidencia (debe existir previamente)
+GET {{url}}/api/envios/{{codigo}}/evidencia
+Authorization: Bearer {{token_cliente}}
+
+### 3. Registrar evidencia simulada (solo después de estado entregado)
+POST {{url}}/api/envios/{{codigo}}/evidencia
+Authorization: Bearer {{token_repartidor}}
+Idempotency-Key: evidencia-envio-demo-0001
+Content-Type: application/json
+
+{
+  "receptor": "Receptor Ficticio",
+  "observacion": "Entrega simulada para demostración académica",
+  "referencia": "evidencia-demo://{{codigo}}/recibo-01"
+}
+
+### 4. Actualizar posición temporal simulada
+POST {{url}}/api/repartidores/{{repartidor_id}}/posicion-temporal
+Authorization: Bearer {{token_repartidor}}
+Content-Type: application/json
+
+{
+  "latitud": -0.1807,
+  "longitud": -78.4678,
+  "estado": "en_ruta"
+}
+
+### 5. Consultar posición temporal y TTL restante
+GET {{url}}/api/repartidores/{{repartidor_id}}/posicion-temporal
+Authorization: Bearer {{token_operador}}
+
+### 6. Consultar salud API/PostgreSQL
+GET {{url}}/health
+
+# Nota: las coordenadas son ficticias para pruebas; Redis las elimina al vencer
+# el TTL de 120 segundos desde la última actualización.

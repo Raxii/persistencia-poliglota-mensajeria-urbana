@@ -1,0 +1,27 @@
+name: proyecto_redis
+services:
+  redis:
+    build: .
+    image: grupo1-redis:1.0
+    container_name: proyecto-redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      proyecto_red:
+        aliases:
+          - redis-db
+volumes:
+  redis_data:
+    name: proyecto_redis_data
+networks:
+  proyecto_red:
+    external: true
+    name: proyecto-red

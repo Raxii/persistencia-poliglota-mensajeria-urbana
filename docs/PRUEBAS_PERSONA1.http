@@ -1,0 +1,85 @@
+# VS Code + extensión REST Client. Ejecutar en orden.
+# Reemplazar tokens y código dinámico después de cada respuesta.
+@url = http://localhost:3000
+@token_cliente = PEGAR_TOKEN_CLIENTE
+@token_operador = PEGAR_TOKEN_OPERADOR
+@token_repartidor = PEGAR_TOKEN_REPARTIDOR
+@codigo = PEGAR_CODIGO_ENV_REAL
+@asignacion_id = 1
+
+### Verificar que PostgreSQL responde
+GET {{url}}/health
+
+### Login como cliente
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{"usuario":"cliente_demo","clave":"Demo2026!"}
+
+### Login como operador
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{"usuario":"operador_demo","clave":"Demo2026!"}
+
+### Login como repartidor
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{"usuario":"repartidor_demo","clave":"Demo2026!"}
+
+### Consultar zonas
+GET {{url}}/api/zonas
+Authorization: Bearer {{token_operador}}
+
+### Consultar repartidores y capacidad
+GET {{url}}/api/repartidores
+Authorization: Bearer {{token_operador}}
+
+### Crear envío ficticio
+POST {{url}}/api/envios
+Authorization: Bearer {{token_cliente}}
+Idempotency-Key: c96d0fca-d912-4259-b019-a64bd754f44e
+Content-Type: application/json
+
+{"remitente":"Prueba Uno","destinatario":"Prueba Dos","direccion_origen":"Calle Inventada 1","direccion_destino":"Calle Inventada 2","zona_origen_id":1,"zona_destino_id":2,"tipo_servicio":"estandar"}
+
+### Consultar envíos pendientes
+GET {{url}}/api/envios?estado=creado
+Authorization: Bearer {{token_operador}}
+
+### Validar y aceptar solicitud (obligatorio antes de asignar)
+POST {{url}}/api/envios/{{codigo}}/aceptar
+Authorization: Bearer {{token_operador}}
+
+### Asignar a REP-001
+POST {{url}}/api/asignaciones
+Authorization: Bearer {{token_operador}}
+Content-Type: application/json
+
+{"codigo_envio":"{{codigo}}","repartidor_id":1}
+
+### Transición correcta: retirado
+PATCH {{url}}/api/envios/{{codigo}}/estado
+Authorization: Bearer {{token_repartidor}}
+Content-Type: application/json
+
+{"estado":"retirado","observacion":"Recogido en lugar ficticio"}
+
+### Transición correcta: en tránsito
+PATCH {{url}}/api/envios/{{codigo}}/estado
+Authorization: Bearer {{token_repartidor}}
+Content-Type: application/json
+
+{"estado":"en_transito"}
+
+### Finalizar entrega (libera un cupo)
+PATCH {{url}}/api/envios/{{codigo}}/estado
+Authorization: Bearer {{token_repartidor}}
+Content-Type: application/json
+
+{"estado":"entregado","observacion":"Entrega simulada"}
+
+### Comprobar estado actual
+GET {{url}}/api/envios/{{codigo}}
+Authorization: Bearer {{token_cliente}}

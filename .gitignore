@@ -1,0 +1,67 @@
+
+# ==========================================
+# SECRETOS Y VARIABLES DE ENTORNO
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.template
+!**/.env.sample
+
+*.pem
+*.key
+secrets/
+
+# ==========================================
+# DEPENDENCIAS
+# ==========================================
+node_modules/
+**/node_modules/
+
+# ==========================================
+# COMPILACION Y PRUEBAS
+# ==========================================
+dist/
+build/
+coverage/
+.vite/
+.cache/
+playwright-report/
+test-results/
+
+# ==========================================
+# LOGS
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# ==========================================
+# DATOS LOCALES Y VOLUMENES
+# ==========================================
+pgdata/
+mongo-data/
+redis-data/
+volumes/
+.docker-data/
+
+# ==========================================
+# ARCHIVOS TEMPORALES
+# ==========================================
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+*.bak
+*.backup
+
+# ==========================================
+# EDITORES
+# ==========================================
+.idea/

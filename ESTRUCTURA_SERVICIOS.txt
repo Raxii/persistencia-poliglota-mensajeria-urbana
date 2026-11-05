@@ -1,0 +1,12 @@
+PROYECTOS DOCKER INDEPENDIENTES
+===============================
+
+PROYECTO_POSTGRES/docker-compose.yml
+PROYECTO_MONGO/docker-compose.yml
+PROYECTO_REDIS/docker-compose.yml
+PROYECTO_API/docker-compose.yml
+PROYECTO_FRONTEND/docker-compose.yml
+
+No hay docker-compose.yml integrado en la raíz.
+INICIAR_TODO.ps1 orquesta los cinco Compose independientes.
+DETENER_TODO.ps1 detiene los cinco sin borrar volúmenes.

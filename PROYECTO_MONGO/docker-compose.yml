@@ -1,0 +1,27 @@
+name: proyecto_mongo
+services:
+  mongo:
+    build: .
+    image: grupo1-mongo:1.0
+    container_name: proyecto-mongo
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      proyecto_red:
+        aliases:
+          - mongo-db
+volumes:
+  mongo_data:
+    name: proyecto_mongo_data
+networks:
+  proyecto_red:
+    external: true
+    name: proyecto-red

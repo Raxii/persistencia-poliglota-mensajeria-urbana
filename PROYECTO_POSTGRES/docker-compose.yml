@@ -1,0 +1,31 @@
+name: proyecto_postgres
+services:
+  postgres:
+    build: .
+    image: grupo1-postgres:1.0
+    container_name: proyecto-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mensajeria
+      POSTGRES_USER: mensajeria
+      POSTGRES_PASSWORD: clave_local_demo
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mensajeria -d mensajeria"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      proyecto_red:
+        aliases:
+          - postgres-db
+volumes:
+  postgres_data:
+    name: proyecto_postgres_data
+networks:
+  proyecto_red:
+    external: true
+    name: proyecto-red
