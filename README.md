@@ -3,9 +3,9 @@
 > **Universidad de las Fuerzas Armadas ESPE**  
 > **Asignatura:** Modelado avanzado de bases de datos  
 > **Caso:** Registro de envíos, despacho y seguimiento  
-> **Grupo:** \[Completar\]  
-> **Integrantes:** \[Completar con los nombres oficiales\]  
-> **Docente:** \[Completar\]
+> **Grupo:**01
+> **Integrantes:** Byron Aguilar,Santiago Nogales, Mateo Chanataxi 
+> **Docente:**  Magi Paul Díaz Zúñiga
 
 ## 1. Descripción
 
